@@ -31,7 +31,7 @@ const Scanner = () => {
             setResult(response);
             setScan(false);
             setScanResult(true);
-            navigate("Order Place", { response });
+            navigate("OrderList", { response });
 
         }
     }
@@ -60,7 +60,7 @@ const Scanner = () => {
                     <TouchableOpacity onPress={activeQR} style={styles.buttonScan}>
                         <View style={styles.buttonWrapper}>
                             <Image source={require("../../assets/images/qrCode.jpg")} style={{ height: 36, width: 36 }}></Image>
-                            <Text style={{ color: '#2196f3',marginLeft:10 }}>Press to Scan QR Code</Text>
+                            <Text style={{ color: '#2196f3', marginLeft: 10 }}>Press to Scan QR Code</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
