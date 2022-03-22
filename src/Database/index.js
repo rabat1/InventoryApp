@@ -85,6 +85,7 @@ export default class Database {
       };
 
       addProductItem(prod) {
+        console.log(prod.itemId);
         
         const time= new Date().toLocaleString();
         prod.createdOn=time;
@@ -142,6 +143,30 @@ export default class Database {
           });
         });  
       }
+
+      productById(id) {
+        console.log('id',id);
+        return new Promise((resolve) => {
+          this.initDB().then((db) => {
+            db.transaction((tx) => {
+              tx.executeSql('SELECT * FROM Inventory WHERE itemId = ?', [id]).then(([tx,results]) => {
+                console.log(results);
+                if(results.rows.length > 0) {
+                  let row = results.rows.item(0);
+                  resolve(row);
+                }
+              });
+            }).then((result) => {
+              this.closeDatabase(db);
+            }).catch((err) => {
+              console.log(err);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        });  
+      };
+
       deleteProduct(id) {
         return new Promise((resolve) => {
           this.initDB().then((db) => {

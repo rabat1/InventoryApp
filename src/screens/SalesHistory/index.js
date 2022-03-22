@@ -10,7 +10,7 @@ const index = () => {
     <View style={{backgroundColor:'white'}}>
     <Text style={{marginVertical:'5%',textAlign: 'center',fontSize:18}}>Sales History Record</Text>
     <ScrollView>
-<Table />
+    <Table />
     </ScrollView>
     </View>
     </>

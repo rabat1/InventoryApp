@@ -1,5 +1,5 @@
 import Scanner from "./Scanner";
-import OrderPlace from './OrderPlace';
+import OrderList from './OrderList';
 import SalesHistory from "./SalesHistory";
 import Transaction from "./Transaction";
 import Inventory from './Inventory';
@@ -10,6 +10,6 @@ import AddCustomer from './AddCustomer';
 import OrderDetails from './OrderDetails';
 
 export{
-    Scanner,OrderPlace,SalesHistory,Transaction,Inventory,Customer,AddInventoryItem,
-    Itemdescription,AddCustomer,OrderDetails,
+    Scanner,SalesHistory,Transaction,Inventory,Customer,AddInventoryItem,
+    Itemdescription,AddCustomer,OrderDetails,OrderList
 }

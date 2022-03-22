@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AddCustomer, AddInventoryItem, Customer, Inventory, Itemdescription, OrderDetails, OrderPlace, SalesHistory, Scanner, Transaction } from '../../screens';
+import { AddCustomer, AddInventoryItem, Customer, Inventory, Itemdescription, OrderDetails, OrderList, OrderPlace, SalesHistory, Scanner, Transaction } from '../../screens';
 
 const ApplicationStack= createNativeStackNavigator();
 
@@ -8,7 +8,7 @@ export function OrderScannerStack(){
     return(
       <ApplicationStack.Navigator initialRouteName='Scanner'>
         <ApplicationStack.Screen name='Scanner' component={Scanner} options={{headerShown:false}}/>
-        <ApplicationStack.Screen name='Order Place' component={OrderPlace} options={{headerShown:false}}/>
+        <ApplicationStack.Screen name='Order Place' component={OrderList} options={{headerShown:false}}/>
   
       </ApplicationStack.Navigator>
     )
