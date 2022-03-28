@@ -6,13 +6,12 @@ import styles from './styles'
 import Colors from '../../Utils/Colors'
 
 const index = (props) => {
-  
+
   const ItemSeprator = () => {
     return (
       <View style={{ height: 1, backgroundColor: "rgba(0,0,0,0.3)", marginHorizontal: 10, }} />
     )
   }
-  
 
   const EditDelete = ({ item }) => {
     return (
@@ -20,13 +19,11 @@ const index = (props) => {
         <TouchableOpacity style={styles.IconContainer} onPress={() => props.onEdit(item)} >
           <Icon size={22} name='pencil' color='black' />
           <Text style={styles.textColor}  >Edit</Text>
-
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => props.onDelete(item)} style={styles.IconContainer}>
           <Icon size={22} name='trash' color='red' />
           <Text style={styles.textColor} >Delete</Text>
-
         </TouchableOpacity>
       </>
     )
@@ -39,12 +36,14 @@ const index = (props) => {
         {item.itemName ?
           (
             <TouchableOpacity style={styles.container} onPress={() => props.showDescription(item)} >
+
               <Text style={[styles.itemName, styles.textColor]} >{item.itemName}</Text>
 
               <View style={styles.qtyContainer} >
                 <Text style={[styles.qtyText, styles.textColor]}>{item.itemStock}</Text>
                 <Text style={styles.textColor}>Qty</Text>
               </View>
+
               <EditDelete item={item} />
 
 
@@ -58,12 +57,11 @@ const index = (props) => {
                 <Text style={[styles.itemName, styles.textColor]} >{item.customerName}</Text>
                 <Text style={styles.textColor} >{item.customerPhone}</Text>
               </View>
-              <TouchableOpacity style={{flex:5}} onPress={()=>props.customerOrderDetails(item)}>
-                <Text style={{color:Colors.primary}}>Order Details</Text>
+              <TouchableOpacity style={{ flex: 5 }} onPress={() => props.customerOrderDetails(item)}>
+                <Text style={{ color: Colors.primary }}>Order Details</Text>
 
               </TouchableOpacity>
               <EditDelete item={item} />
-
 
             </View>
           )

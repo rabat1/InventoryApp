@@ -28,8 +28,6 @@ export default function HomeTabs() {
           borderTopRightRadius: 20,
 
         },
-
-
         tabBarIcon: ({ focused, Color, size }) => {
           let iconName;
           if (route.name === 'PlaceOrder') {
@@ -48,17 +46,17 @@ export default function HomeTabs() {
           else if (route.name === 'Customer') {
             [iconName, Color, size] = focused ? ['how-to-reg', 'black', 25] : ['how-to-reg', Colors.grey, 22]
           }
-         
+
           return <Icon color={Color} name={iconName} type='material' size={size} />;
         },
       })}
     >
 
-      <Tab.Screen name="PlaceOrder" component={OrderScannerStack}      />
+      <Tab.Screen name="PlaceOrder" component={OrderScannerStack} />
       <Tab.Screen name="Transaction" component={TransactionStack} />
-      <Tab.Screen name="Inventory" component={InventoryStack}      />
+      <Tab.Screen name="Inventory" component={InventoryStack} />
       <Tab.Screen name="SalesHistory" component={SalesHistoryStack} />
-      <Tab.Screen name="Customer" component={CustomerStack}      />
+      <Tab.Screen name="Customer" component={CustomerStack} />
 
     </Tab.Navigator>
   );

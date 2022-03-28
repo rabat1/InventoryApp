@@ -20,9 +20,7 @@ const index = () => {
   const [data, setData] = useState([]);
 
 
-  useEffect(() => {
-
-  }, [search]);
+  useEffect(() => { }, [search]);
 
   const searchFilterFunction = (text) => {
     if (text) {
@@ -62,28 +60,19 @@ const index = () => {
   const onDelete = (customer) => {
     db.deleteCustomer(customer.customerId);
     getCustomers();
-    
-
   }
+
   const onAdd = () => {
     navigate('AddCustomer');
-
   }
-
 
   const onEdit = (item) => {
     navigate('AddCustomer', { item });
-
-
   }
 
   const customerOrderDetails = (item) => {
-    navigate('OderDetails', { item } );
-
-
-  }
-
-
+    navigate('OderDetails', { item });
+}
 
   return (
     <View style={{ backgroundColor: 'white' }}>

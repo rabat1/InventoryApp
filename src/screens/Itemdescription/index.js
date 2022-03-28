@@ -5,7 +5,7 @@ import { CustomHeader } from '../../navigation/CustomHeader';
 
 const index = () => {
     const { params: { item } = {} } = useRoute();
-    console.log('description', item);
+    //console.log('description', item);
     return (
         <View style={{ minHeight: '100%', backgroundColor: 'white' }}>
             <CustomHeader title="Item Details" backIcon />
