@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from '../../Utils/Icon';
 import Colors from '../../Utils/Colors';
-import { CustomerStack, InventoryStack, OrderScannerStack, SalesHistoryStack, SalesOrderStack, TransactionStack } from '../StackNavihation';
+import { CustomerStack, InventoryStack, OrderScannerStack, SalesHistoryStack } from '../StackNavihation';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,9 +33,6 @@ export default function HomeTabs() {
           if (route.name === 'PlaceOrder') {
             [iconName, Color, size] = focused ? ['qr-code-scanner', 'black', 25] : ['qr-code-scanner', Colors.grey, 22]
           }
-          else if (route.name === 'Transaction') {
-            [iconName, Color, size] = focused ? ['money', 'black', 25] : ['money', Colors.grey, 22]
-          }
           else if (route.name === 'Inventory') {
             [iconName, Color, size] = focused ? ['cases', 'black', 25] : ['cases', Colors.grey, 22]
           }
@@ -53,7 +50,6 @@ export default function HomeTabs() {
     >
 
       <Tab.Screen name="PlaceOrder" component={OrderScannerStack} />
-      <Tab.Screen name="Transaction" component={TransactionStack} />
       <Tab.Screen name="Inventory" component={InventoryStack} />
       <Tab.Screen name="SalesHistory" component={SalesHistoryStack} />
       <Tab.Screen name="Customer" component={CustomerStack} />

@@ -1,40 +1,55 @@
-import { View, Text, ScrollView, TextInput, Button } from 'react-native'
+import { View, Text, ScrollView, TextInput, Button, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from './styles'
+import CustomButton from '../CustomButton';
+import Input from '../Input';
+import Icon from '../../Utils/Icon';
+import { useNavigation } from '@react-navigation/core';
 
 const index = ({ data, onConfirm }) => {
-    console.log(data);
+    //    console.log(data);
+    const { navigate } = useNavigation();
 
-    const [orderData, setOrderData] = useState();
-    useEffect(() => {
-        setOrderData({ ...orderData, status: 'Pending', itemId: data.itemId, totalPrice: 0 });
-    }, []);
+    const [orderData, setOrderData] = useState({
+        unitsOrdered: 1,
+        status: 'Pending',
+        itemId: data.itemId,
+        totalPrice: data.salePricePerUnit,
+        itemName:data.itemName,
+
+    });
 
     const setOrderQty = (e) => {
+
         orderData.unitsOrdered = parseInt(e);
         var totalPricee = parseInt(e) * data.salePricePerUnit;
         orderData.totalPrice = totalPricee;
+        setOrderData({ ...orderData, 'unitsOrdered': e });
     }
+
     return (
 
         <View style={{ marginHorizontal: 20 }}>
+
             <View style={styles.alignRow}>
                 <Text style={styles.text}>{data.itemName}</Text>
+
                 <View style={{ flex: 1 }}>
-                    <Text >{data.salePricePerUnit} </Text>
-                    <Text >SalePrice</Text>
+                    <Text style={{ color: 'black', fontSize: 17 }} >{data.salePricePerUnit} </Text>
+                    <Text style={{ color: 'black', fontSize: 15 }}>SalePrice</Text>
                 </View>
-                <TextInput onChangeText={(e) => setOrderQty(e)} style={styles.input} placeholder="No.Ordered" />
+
             </View>
 
-            <View style={styles.button}>
-                <Button title="Confirm" onPress={() => onConfirm(orderData)} />
-            </View>
+            <Input
+                keyboardType="numeric"
+                value={(orderData.unitsOrdered).toString()}
+                label="Order Quantity"
+                onChangeText={(e) => setOrderQty(e)}
+                autoFocus={true}
+            />
 
-            <View style={styles.scan}>
-                <Button title='Scan item Again' onPress={() => navigate("Scanner")} />
-            </View>
-
+            <CustomButton title='Confirm' primary style={{ marginTop: '5%' }} onPress={() => onConfirm(orderData)} />
         </View>
     )
 }

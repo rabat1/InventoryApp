@@ -108,15 +108,16 @@ const Item = ({ title, unitsOrdered, totalPrice,status }) => (
   </View>
 );
 
-const index = () => {
+const index = ({data}) => {
 
   const { navigate } = useNavigation();
+  console.log('orderList',data);
 
 
   const renderItem = ({ item }) => {
 
     const orderDetails = (item) => {
-      console.log('itemm', item);
+     // console.log('itemm', item);
       navigate('OderDetails', { item });
     }
 
@@ -163,4 +164,4 @@ const styles = StyleSheet.create({
     color: 'black'
   }
 })
-export default index
+export default index;

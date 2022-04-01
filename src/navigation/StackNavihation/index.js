@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AddCustomer, AddInventoryItem, Customer, Inventory, Itemdescription, OrderDetails, OrderList, OrderPlace, SalesHistory, Scanner, Transaction } from '../../screens';
+import { AddCustomer, AddInventoryItem, Customer, Inventory, Itemdescription, OrderDetails, OrderList, PlaceOrder, SalesHistory, Scanner } from '../../screens';
 
 const ApplicationStack = createNativeStackNavigator();
 
@@ -8,20 +8,14 @@ export function OrderScannerStack() {
   return (
     <ApplicationStack.Navigator initialRouteName='Scanner'>
       <ApplicationStack.Screen name='Scanner' component={Scanner} options={{ headerShown: false }} />
-      <ApplicationStack.Screen name='Order Place' component={OrderList} options={{ headerShown: false }} />
+      <ApplicationStack.Screen name='Order Place' component={PlaceOrder} options={{ headerShown: false }} />
       <ApplicationStack.Screen name='OderDetails' component={OrderDetails} options={{ headerShown: false }} />
+      <ApplicationStack.Screen name='OderList' component={OrderList} options={{ headerShown: false }} />
 
     </ApplicationStack.Navigator>
   )
 }
-export function TransactionStack() {
-  return (
-    <ApplicationStack.Navigator initialRouteName='TransactionStack'>
-      <ApplicationStack.Screen name='TransactionStack' component={Transaction} options={{ headerShown: false }} />
 
-    </ApplicationStack.Navigator>
-  )
-}
 export function InventoryStack() {
   return (
     <ApplicationStack.Navigator initialRouteName='InventoryStack'>

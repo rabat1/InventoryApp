@@ -5,21 +5,10 @@ export default StyleSheet.create({
     base: {
         backgroundColor: 'white',
       },
-      scan: {
-        alignSelf:'center',
-        width:'60%',
-        marginVertical:'6%'
-      },
       alignRow: {
         flexDirection: 'row',
         display:'flex',
         marginTop:'10%'
-      },
-      button: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        padding: 10,
-        width: '100%'
       },
       input: {
         borderWidth: 1,
@@ -32,9 +21,9 @@ export default StyleSheet.create({
     
       },
       text: {
-        fontSize: 16,
+        fontSize: 18,
         color: 'black',
-        flex:1
+        flex:2
       }
     
 })

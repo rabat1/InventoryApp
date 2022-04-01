@@ -16,7 +16,7 @@ const Scanner = () => {
 
     useEffect(() => {
         db.initDB();
-    }, [])
+    }, []);
 
     const onSuccess = (response) => {
         const check = response.data.substring(0, 4);
