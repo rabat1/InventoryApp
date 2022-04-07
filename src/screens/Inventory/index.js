@@ -15,9 +15,9 @@ const index = (props) => {
   const isFocused = useIsFocused();
 
 
-  const getProducts = () => {
+  const getProducts = async() => {
     let products = [];
-    db.listProduct().then((data) => {
+    await db.listProduct().then((data) => {
       products = data;
       setProducts(products);
     

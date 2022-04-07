@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ScannerComponent from '../../Components/ScannerComponent'
 import { CustomHeader } from '../../navigation/CustomHeader';
 import Database from '../../Database';
+import CustomButton from '../../Components/CustomButton';
 
 const Scanner = () => {
 
@@ -14,9 +15,9 @@ const Scanner = () => {
     const [result, setResult] = useState(null);
     const db = new Database();
 
-    useEffect(() => {
-        db.initDB();
-    }, []);
+    // useEffect(() => {
+    //     db.initDB();
+    // }, []);
 
     const onSuccess = (response) => {
         const check = response.data.substring(0, 4);
@@ -43,7 +44,10 @@ const Scanner = () => {
         setScan(true);
     }
 
-    useEffect(() => { }, [result])
+    useEffect(() => { }, [result]);
+    const viewOrderList=()=>{
+        navigate('OderList');
+    }
 
     return (
         <>
@@ -56,6 +60,9 @@ const Scanner = () => {
                         activeQR={activeQR}
                         onSuccess={onSuccess}
                     />
+                </View>
+                <View style={{marginHorizontal:20,marginTop:'50%'}}>
+                <CustomButton title="View Order list" primary onPress={viewOrderList} />
                 </View>
             </SafeAreaView>
         </>

@@ -18,9 +18,8 @@ const index = () => {
   const [scan, setScan] = useState(false);
   const [ScanResult, setScanResult] = useState(false);
   const [result, setResult] = useState(null);
-  const [edit, setEdit] = useState(false);
+  //const [edit, setEdit] = useState(false);
   const { navigate } = useNavigation();
-
 
   const db = new Database();
   const { params } = useRoute();

@@ -11,7 +11,6 @@ import { StackActions } from '@react-navigation/core';
 const index = (props) => {
 
   const { params: { response } = {} } = useRoute();
-  console.log('storedData', props.orderData.userReducer.order);
 
   const { navigate } = useNavigation();
   const dispatch = useDispatch();
@@ -19,6 +18,8 @@ const index = (props) => {
   const db = new Database();
 
   const [data, setData] = useState();
+  const [prod, setProd] = useState([]);
+
   const [listData, setListData] = useState(props.orderData.userReducer.order);
 
   const getProduct = () => {
@@ -28,9 +29,8 @@ const index = (props) => {
       setData(product);
     }).catch((err) => {
       console.log(err);
-
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     response ? getProduct() : null;
@@ -40,7 +40,6 @@ const index = (props) => {
   useEffect(() => { }, [listData]);
 
   const onConfirm = (data) => {
-    //customer..???
     if (!data.unitsOrdered || data.unitsOrdered < 1) {
       Alert.alert('Minimum Qunatity should be 1');
     }
@@ -50,28 +49,71 @@ const index = (props) => {
       setData(null);
       setListData('something');
     }
+}
 
+  const getProd = async (id) => {
+    await db.productById(id).then((data) => {
+      prod.push(data);
+      setProd(data);
+    }).catch((err) => {
+      console.log( err);
+
+    });
   }
-  const addOrderToDb = () => {
-    console.log('addd', props.orderData.userReducer.order);
-    //add data to db
-    //inventory update as order qty subtract from inventory stock
+
+  const add = async (id, unitsOrder, itemName,status,totalPrice) => {
+    await getProd(id);
+    var obj = Object.assign({}, prod);
+    var actualstock = (obj['0'].itemStock);
+
+    if (actualstock < unitsOrder) {
+      Alert.alert('Not Sufficient Stock of ' + itemName);
+    }
+    else {
+      var remainingitemStock = parseInt(actualstock) - parseInt(unitsOrder);
+      var updateInventory = await db.updateProductAfterOrder(id, remainingitemStock);
+      var addOrder = await db.addOrder(id, unitsOrder, itemName,status,totalPrice);
+    }
+    obj = {};
+    prod.pop();
+  };
+
+  const addOrderToDb = async () => {
+    var orders = props.orderData.userReducer.order;
+    var prodIDS = [];
+    var obj = {};
+    for (var i = 0; i < orders.length; i++) {
+      obj['itemId'] = orders[i].itemId;
+      obj['itemName'] = orders[i].itemName;
+      obj['unitsOrdered'] = orders[i].unitsOrdered;
+      obj['status'] = orders[i].status;
+      obj['totalPrice']=orders[i].totalPrice;
+      prodIDS.push(obj);
+      obj = {};
+    }
+
+    for (var i = 0; i < prodIDS.length; i++) {
+      await add(
+        prodIDS[i].itemId, 
+        prodIDS[i].unitsOrdered, 
+        prodIDS[i].itemName,
+        prodIDS[i].status, 
+        prodIDS[i].totalPrice,
+        );
+    };
     dispatch(updateOrderList());
     setListData(null);
     props.navigation.dispatch(StackActions.popToTop('Order Place'));
+    Alert.alert('Your Order has been Added');
     navigate('OderList');
-  
-    //here navigate to list orderListComponent;
-  }
+  };
 
   return (
     <>
       <CustomHeader title="Place Order" backIcon />
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         {
-          data ?
-            <OrderConfirmCard data={data} onConfirm={onConfirm} />
-            : null
+          data ?  <OrderConfirmCard data={data} onConfirm={onConfirm} /> : null
         }
 
         {

@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
         color: 'black'
     }
 })
-export default index
+export default index;

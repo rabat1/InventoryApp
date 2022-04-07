@@ -15,7 +15,7 @@ const index = ({ data, onConfirm }) => {
         status: 'Pending',
         itemId: data.itemId,
         totalPrice: data.salePricePerUnit,
-        itemName:data.itemName,
+        itemName: data.itemName,
 
     });
 
@@ -38,7 +38,6 @@ const index = ({ data, onConfirm }) => {
                     <Text style={{ color: 'black', fontSize: 17 }} >{data.salePricePerUnit} </Text>
                     <Text style={{ color: 'black', fontSize: 15 }}>SalePrice</Text>
                 </View>
-
             </View>
 
             <Input
