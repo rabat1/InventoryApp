@@ -10,19 +10,21 @@ const index = (props) => {
   const { params } = useRoute();
   const db = new Database();
   const { navigate } = useNavigation();
-  
+
   const DetailView = ({ title, value }) => (
     <View style={styles.displayView}>
       <Text style={styles.title}>{title} </Text>
       <Text style={[params?.item.status == 'Completed' ? { color: 'green' } : { color: 'orange' }, { fontSize: 17, flex: 1 }]}>{value}</Text>
     </View>
   );
-  
-  const updateStatus = () => {
-    db.updateOrderStatus(params?.item.orderId);
+
+  const updateStatus = async () => {
+    const { orderId, itemId } = params?.item;
+    await db.updateOrderStatus(orderId);
     Alert.alert('Order Status Has Been updated');
+    await db.addSalesHistory(orderId, itemId);
     navigate('OderList');
-  }
+  };
 
   return (
     <View style={{ backgroundColor: 'white', minHeight: '100%' }}>

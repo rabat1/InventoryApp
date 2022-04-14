@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import OrderListComponent from '../../Components/OrderListComponent';
 import { CustomHeader } from '../../navigation/CustomHeader';
@@ -15,8 +15,9 @@ const index = () => {
     let orderss = [];
     await db.listOrders().then((data) => {
       orderss = data;
+      if(data.length>0){
       setOrderr(orderss);
-      console.log('data',data);
+      }
     }).catch((err) => {
       console.log(err);
 
@@ -27,9 +28,14 @@ const index = () => {
   }, [isFocused]);
   
   return (
-    <View style={{backgroundColor:'white'}}>
+    <View style={{backgroundColor:'white',minHeight:'100%'}}>
       <CustomHeader title="Shop's Orders" backIcon />
-      <OrderListComponent data={orderr} />
+      {orderr?
+      <OrderListComponent data={orderr} />:
+      <Text style={{textAlign:'center',fontSize:16,marginTop:'70%'}}>
+        No Data
+        </Text>
+      }
     </View>
   )
 }

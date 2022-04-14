@@ -28,17 +28,17 @@ export default class Database {
               //  console.log("Database OPEN");
               db.executeSql('SELECT 1 FROM Orders LIMIT 1').then(() => {
                 //  db.executeSql('DROP TABLE IF EXISTS Inventory '); 
-               //   db.executeSql('DROP TABLE IF EXISTS Orders '); 
+                //  db.executeSql('DROP TABLE IF EXISTS Orders '); 
                 //  db.executeSql('DROP TABLE IF EXISTS Transactiondet '); 
                 //  db.executeSql('DROP TABLE IF EXISTS Customer '); 
                 //  db.executeSql('DROP TABLE IF EXISTS SalesHistory '); 
                 //  db.executeSql('DROP TABLE IF EXISTS User '); 
 
-                  console.log("Database is dleted ... executing query ...");
+                //   console.log("Database is dleted ... executing query ...");
 
                 //        console.log("Database is ready ... executing query ...");
               }).catch((error) => {
-                console.log("Received error: ", error);
+              //  console.log("Received error: ", error);
                 console.log("Database not yet ready ... populating data");
                 db.transaction((tx) => {
 
@@ -46,8 +46,8 @@ export default class Database {
                   tx.executeSql('CREATE TABLE IF NOT EXISTS Customer (customerId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, customerName TEXT NOT NULL, customerPhone INTEGER NOT NULL,customerCreatedOn TEXT NOT NULL)');
                   tx.executeSql('CREATE TABLE IF NOT EXISTS Orders ( orderId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, status TEXT NOT NULL,unitsOrdered INTEGER NOT NULL,  totalPrice INTEGER NOT NULL, orderCreatedOn TEXT NOT NULL, itemId TEXT , FOREIGN KEY (itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE  )');
                   tx.executeSql('CREATE TABLE IF NOT EXISTS User (userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userCNIC TEXT NOT NULL )');
-                  tx.executeSql('CREATE TABLE IF NOT EXISTS SalesHistory (salesId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,status DEFAULT COMPLETED, OrderCompletedOn TEXT NOT NULL, orderId INTEGER, itemId INTEGER, FOREIGN KEY (orderId) REFERENCES Orders(orderId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE ON UPDATE CASCADE)');
-                  tx.executeSql('CREATE TABLE IF NOT EXISTS Transactiondet (transactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,transDate TEXT NOT NULL,salesId INTEGER,customerId INTEGER,FOREIGN KEY (salesId) REFERENCES SalesHistory(salesId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(customerId) REFERENCES Customer(customerId) ON DELETE CASCADE ON UPDATE CASCADE)');
+                  tx.executeSql('CREATE TABLE IF NOT EXISTS SalesHistory (salesId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,status DEFAULT COMPLETED, OrderCompletedOn TEXT NOT NULL, orderId INTEGER, itemId TEXT, FOREIGN KEY (orderId) REFERENCES Orders(orderId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE ON UPDATE CASCADE)');
+                  // // tx.executeSql('CREATE TABLE IF NOT EXISTS Transactiondet (transactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,transDate TEXT NOT NULL,salesId INTEGER,customerId INTEGER,FOREIGN KEY (salesId) REFERENCES SalesHistory(salesId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(customerId) REFERENCES Customer(customerId) ON DELETE CASCADE ON UPDATE CASCADE)');
 
                 }).then(() => {
                   console.log("Tables created successfully");
@@ -71,13 +71,13 @@ export default class Database {
 
   closeDatabase(db) {
     if (db) {
-      //  console.log("Closing DB");
+        //console.log("Closing DB");
       db.close()
         .then(status => {
-          //    console.log("Database CLOSED");
+          // console.log("Database CLOSED");
         })
         .catch(error => {
-          this.errorCB(error);
+          console.log(error);
         });
     } else {
       console.log("Database was not OPENED");
@@ -85,8 +85,6 @@ export default class Database {
   };
 
   addProductItem(prod) {
-    console.log(prod.itemId);
-
     const time = new Date().toLocaleString();
     prod.createdOn = time;
     var saleprice = parseInt(prod.salePricePerUnit);
@@ -97,14 +95,13 @@ export default class Database {
     return new Promise((resolve) => {
       this.initDB().then((db) => {
         db.transaction((tx) => {
-          //           console.log("calless")
           tx.executeSql('INSERT INTO Inventory VALUES (?, ?, ?, ?, ?, ?,?,?)', [prod.itemId, prod.itemName, prod.itemDesc, prod.costPerUnit, prod.itemImage, prod.itemStock, prod.salePricePerUnit, prod.createdOn]).then(([tx, results]) => {
             resolve(results);
-            //           console.log('success')
           });
         }).then((result) => {
           this.closeDatabase(db);
         }).catch((err) => {
+          resolve(err);
         });
       }).catch((err) => {
       });
@@ -145,12 +142,10 @@ export default class Database {
   }
 
   productById(id) {
-    console.log('id', id);
     return new Promise((resolve) => {
       this.initDB().then((db) => {
         db.transaction((tx) => {
           tx.executeSql('SELECT * FROM Inventory WHERE itemId = ?', [id]).then(([tx, results]) => {
-            console.log(results);
             if (results.rows.length > 0) {
               let row = results.rows.item(0);
               resolve(row);
@@ -172,7 +167,6 @@ export default class Database {
       this.initDB().then((db) => {
         db.transaction((tx) => {
           tx.executeSql('DELETE FROM Inventory WHERE itemId = ?', [id]).then(([tx, results]) => {
-            //  console.log(results);
             resolve(results);
           });
         }).then((result) => {
@@ -187,7 +181,6 @@ export default class Database {
   }
 
   updateProduct(prod, id) {
-    console.log('update', prod)
     return new Promise((resolve) => {
       this.initDB().then((db) => {
         db.transaction((tx) => {
@@ -208,8 +201,6 @@ export default class Database {
 
 
   updateProductAfterOrder(id, updatedStock) {
-    console.log('updatedunitsDB', updatedStock);
-    console.log('updatedidDB', id);
     
     return new Promise((resolve) => {
       this.initDB().then((db) => {
@@ -218,7 +209,6 @@ export default class Database {
             resolve(results);
           }
           );
-          console.log('hii');
         }).then((result) => {
           this.closeDatabase(db);
         }).catch((err) => {
@@ -247,7 +237,6 @@ export default class Database {
                 customerPhone,
               });
             }
-            console.log('customers', customers);
             resolve(customers);
           });
         }).then((result) => {
@@ -262,8 +251,6 @@ export default class Database {
   }
 
   addCustomer(customer) {
-    console.log('cusss', customer.customerName);
-
     const time = new Date().toLocaleString();
     customer.createdOn = time;
 
@@ -287,7 +274,6 @@ export default class Database {
       this.initDB().then((db) => {
         db.transaction((tx) => {
           tx.executeSql('DELETE FROM Customer WHERE customerId = ?', [id]).then(([tx, results]) => {
-            //  console.log(results);
             resolve(results);
           });
         }).then((result) => {
@@ -343,16 +329,15 @@ export default class Database {
       const orders = [];
       this.initDB().then((db) => {
         db.transaction((tx) => {
-          tx.executeSql('SELECT Orders.orderId,Orders.status,Orders.totalPrice,Orders.orderCreatedOn,Orders.unitsOrdered,Inventory.itemName FROM Orders INNER JOIN Inventory ON Orders.itemId=Inventory.itemId', []).then(([tx, results]) => {
+          tx.executeSql('SELECT Orders.orderId,Orders.status,Orders.totalPrice,Orders.orderCreatedOn,Orders.unitsOrdered,Inventory.itemName,Inventory.itemId FROM Orders INNER JOIN Inventory ON Orders.itemId=Inventory.itemId', []).then(([tx, results]) => {
             var len = results.rows.length;
             for (let i = 0; i < len; i++) {
               let row = results.rows.item(i);
-              const { orderId, status, totalPrice,orderCreatedOn,unitsOrdered,itemName } = row;
+              const { orderId, status, totalPrice,orderCreatedOn,unitsOrdered,itemName,itemId } = row;
               orders.push({
-                orderId, status, totalPrice,orderCreatedOn,unitsOrdered,itemName
+                orderId, status, totalPrice,orderCreatedOn,unitsOrdered,itemName,itemId
               });
             }
-            console.log('ordrssssssss', orders);
             resolve(orders);
           });
         }).then((result) => {
@@ -374,7 +359,7 @@ updateOrderStatus(id) {
             resolve(results);
           });
         }).then((result) => {
-          this.closeDatabase(db);
+         // this.closeDatabase(db);
         }).catch((err) => {
           console.log(err);
         });
@@ -384,4 +369,50 @@ updateOrderStatus(id) {
     });
   }
 
+  addSalesHistory(orderId,itemId) {
+    
+    const OrderCompletedOn = new Date().toLocaleString();
+    const status="Completed";
+    return new Promise((resolve) => {
+      this.initDB().then((db) => {
+        db.transaction((tx) => {
+          tx.executeSql('INSERT INTO SalesHistory VALUES (?, ?, ?, ?, ?)', [,status, OrderCompletedOn, orderId,itemId]).then(([tx, results]) => {
+            resolve(results);
+            
+          });
+        }).then((result) => {
+          this.closeDatabase(db);
+        }).catch((err) => {
+        });
+      }).catch((err) => {
+      });
+    });
+  }
+
+  listSalesHistory() {
+    return new Promise((resolve) => {
+      const orders = [];
+      this.initDB().then((db) => {
+        db.transaction((tx) => {
+          tx.executeSql('select Inventory.itemName,Inventory.salePricePerUnit,Inventory.costPerUnit,SalesHistory.OrderCompletedOn,Orders.unitsOrdered,Orders.totalPrice FROM SalesHistory INNER JOIN Inventory ON SalesHistory.itemId=Inventory.itemId INNER JOIN Orders ON SalesHistory.itemId=Orders.itemId', []).then(([tx, results]) => {
+            var len = results.rows.length;
+            for (let i = 0; i < len; i++) {
+              let row = results.rows.item(i);
+              const { itemName, salePricePerUnit, costPerUnit,OrderCompletedOn,unitsOrdered,totalPrice} = row;
+              orders.push({
+                itemName, salePricePerUnit, costPerUnit,OrderCompletedOn,unitsOrdered,totalPrice
+              });
+            }
+            resolve(orders);
+          });
+        }).then((result) => {
+          this.closeDatabase(db);
+        }).catch((err) => {
+          console.log(err);
+        });
+      }).catch((err) => {
+        console.log(err);
+      });
+    });
+  }
 }

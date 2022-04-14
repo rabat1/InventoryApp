@@ -72,7 +72,7 @@ const index = (props) => {
 
   const ListEmptyComponent = () => {
     return (
-      <Text>No Items</Text>
+      <Text style={{textAlign:'center',fontSize:16,marginTop:'70%'}}>No Items</Text>
     )
   }
   return (

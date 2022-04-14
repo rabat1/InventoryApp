@@ -64,7 +64,6 @@ const index = () => {
     } else {
       setResult(response);
       setScan(false);
-      console.log('response', response);
       setScanResult(false);
     }
   }
@@ -77,7 +76,6 @@ const index = () => {
   useEffect(() => { }, [result])
 
   const onChangeText = ({ name, value }) => {
-    console.log(name);
     setForm({ ...form, [name]: value });
   };
 
@@ -97,7 +95,7 @@ const index = () => {
     }
   }
 
-  const onSubmit = () => {
+  const onSubmit = async() => {
 
     const re = /^[0-9\b]+$/;
     const { itemName, itemDesc, salePricePerUnit, itemStock, costPerUnit, itemImage } = form;
@@ -111,7 +109,7 @@ const index = () => {
         Alert.alert("Please Enter Correct Quantity ");
       }
       else {
-        db.updateProduct(form, form.itemId);
+        await db.updateProduct(form, form.itemId);
         navigate('InventoryStack');
       }
 
@@ -124,8 +122,21 @@ const index = () => {
         Alert.alert("Please Enter Correct Quantity ");
       }
       else {
-        db.addProductItem(form);
-        navigate('InventoryStack')
+        var response=await db.addProductItem(form);
+      
+        if(response.message){
+          if(response.message.includes("UNIQUE constraint failed")){
+          Alert.alert("Item Already Exist Please add Unique item");
+          }
+          else{
+            Alert.alert("Item could not added please try Again");
+          }
+          navigate('InventoryStack');
+        }
+      
+        else{
+        navigate('InventoryStack');
+        }
       }
     }
   }
@@ -147,8 +158,6 @@ const index = () => {
     closeSheet();
     setLocalFile(image);
     setForm({ ...form, 'itemImage': image.path });
-
-    console.log('imahes', image)
   }
   const setView = () => {
     setScanstart(prev => !prev);

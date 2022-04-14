@@ -52,7 +52,7 @@ export default function HomeTabs() {
       <Tab.Screen name="PlaceOrder" component={OrderScannerStack} />
       <Tab.Screen name="Inventory" component={InventoryStack} />
       <Tab.Screen name="SalesHistory" component={SalesHistoryStack} />
-      <Tab.Screen name="Customer" component={CustomerStack} />
+      {/* <Tab.Screen name="Customer" component={CustomerStack} /> */}
 
     </Tab.Navigator>
   );

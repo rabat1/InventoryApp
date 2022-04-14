@@ -29,7 +29,8 @@ const index = (props) => {
 
   useEffect(() => {
     getProducts();
-  }, [isFocused])
+  }, [isFocused]);
+  useEffect(()=>{},[productss]);
 
   const onDelete = (item) => {
     db.deleteProduct(item.itemId);
@@ -52,8 +53,10 @@ const index = (props) => {
   return (
     <View>
       <CustomHeader title='Inventory' />
+      {productss?
       <List data={productss} onDelete={onDelete} onEdit={onEdit} onAdd={onAdd} showDescription={showDescription}/>
-    </View>
+      :null}
+      </View>
   )
 }
 

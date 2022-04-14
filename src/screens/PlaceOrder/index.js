@@ -4,7 +4,7 @@ import ListRedux from '../../Components/ListRedux';
 import { CustomHeader } from '../../navigation/CustomHeader';
 import Database from '../../Database';
 import OrderConfirmCard from '../../Components/OrderConfirmCard';
-import { Alert, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { connect, useDispatch } from 'react-redux';
 import { updateOrderList } from '../../store/actions/userAction';
 import { StackActions } from '@react-navigation/core';
@@ -49,19 +49,19 @@ const index = (props) => {
       setData(null);
       setListData('something');
     }
-}
+  }
 
   const getProd = async (id) => {
     await db.productById(id).then((data) => {
       prod.push(data);
       setProd(data);
     }).catch((err) => {
-      console.log( err);
+      console.log(err);
 
     });
   }
 
-  const add = async (id, unitsOrder, itemName,status,totalPrice) => {
+  const add = async (id, unitsOrder, itemName, status, totalPrice) => {
     await getProd(id);
     var obj = Object.assign({}, prod);
     var actualstock = (obj['0'].itemStock);
@@ -72,7 +72,7 @@ const index = (props) => {
     else {
       var remainingitemStock = parseInt(actualstock) - parseInt(unitsOrder);
       var updateInventory = await db.updateProductAfterOrder(id, remainingitemStock);
-      var addOrder = await db.addOrder(id, unitsOrder, itemName,status,totalPrice);
+      var addOrder = await db.addOrder(id, unitsOrder, itemName, status, totalPrice);
     }
     obj = {};
     prod.pop();
@@ -87,24 +87,23 @@ const index = (props) => {
       obj['itemName'] = orders[i].itemName;
       obj['unitsOrdered'] = orders[i].unitsOrdered;
       obj['status'] = orders[i].status;
-      obj['totalPrice']=orders[i].totalPrice;
+      obj['totalPrice'] = orders[i].totalPrice;
       prodIDS.push(obj);
       obj = {};
     }
 
     for (var i = 0; i < prodIDS.length; i++) {
       await add(
-        prodIDS[i].itemId, 
-        prodIDS[i].unitsOrdered, 
+        prodIDS[i].itemId,
+        prodIDS[i].unitsOrdered,
         prodIDS[i].itemName,
-        prodIDS[i].status, 
+        prodIDS[i].status,
         prodIDS[i].totalPrice,
-        );
+      );
     };
     dispatch(updateOrderList());
     setListData(null);
     props.navigation.dispatch(StackActions.popToTop('Order Place'));
-    Alert.alert('Your Order has been Added');
     navigate('OderList');
   };
 
@@ -113,11 +112,10 @@ const index = (props) => {
       <CustomHeader title="Place Order" backIcon />
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         {
-          data ?  <OrderConfirmCard data={data} onConfirm={onConfirm} /> : null
+          data ? <OrderConfirmCard data={data} onConfirm={onConfirm} /> : null
         }
-
         {
-          listData ? <ListRedux data={props.orderData.userReducer.order} addOrderToDb={addOrderToDb} /> : null
+          listData ? <ListRedux data={props.orderData.userReducer.order} addOrderToDb={addOrderToDb} /> : <Text style={{textAlign:'center',fontSize:16,marginTop:'70%'}}>No Item Added</Text>
         }
       </View>
     </>

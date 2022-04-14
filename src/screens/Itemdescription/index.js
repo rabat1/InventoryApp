@@ -5,7 +5,6 @@ import { CustomHeader } from '../../navigation/CustomHeader';
 
 const index = () => {
     const { params: { item } = {} } = useRoute();
-    //console.log('description', item);
     return (
         <View style={{ minHeight: '100%', backgroundColor: 'white' }}>
             <CustomHeader title="Item Details" backIcon />
@@ -26,4 +25,4 @@ const index = () => {
     )
 }
 
-export default index
+export default index;

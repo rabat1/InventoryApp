@@ -5,7 +5,6 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import styles from './scanStyle';
 
 const index = (props) => {
-    console.log('hhg', props.scan);
     return (
         <ScrollView>
             <Text style={styles.heading}>Scan QR Code</Text>

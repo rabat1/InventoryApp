@@ -21,8 +21,6 @@ const Scanner = () => {
 
     const onSuccess = (response) => {
         const check = response.data.substring(0, 4);
-        console.log('scanned data' + check);
-
         setResult(response);
         setScan(false);
         setScanResult(true);
@@ -45,6 +43,7 @@ const Scanner = () => {
     }
 
     useEffect(() => { }, [result]);
+    
     const viewOrderList=()=>{
         navigate('OderList');
     }
