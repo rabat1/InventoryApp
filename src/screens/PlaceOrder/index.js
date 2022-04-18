@@ -61,7 +61,7 @@ const index = (props) => {
     });
   }
 
-  const add = async (id, unitsOrder, itemName, status, totalPrice) => {
+  const add = async (id, unitsOrder, itemName, status, totalPrice,costPerUnit,salePricePerUnit) => {
     await getProd(id);
     var obj = Object.assign({}, prod);
     var actualstock = (obj['0'].itemStock);
@@ -72,7 +72,7 @@ const index = (props) => {
     else {
       var remainingitemStock = parseInt(actualstock) - parseInt(unitsOrder);
       var updateInventory = await db.updateProductAfterOrder(id, remainingitemStock);
-      var addOrder = await db.addOrder(id, unitsOrder, itemName, status, totalPrice);
+      var addOrder = await db.addOrder(id, unitsOrder, itemName, status, totalPrice,costPerUnit,salePricePerUnit);
     }
     obj = {};
     prod.pop();
@@ -80,6 +80,7 @@ const index = (props) => {
 
   const addOrderToDb = async () => {
     var orders = props.orderData.userReducer.order;
+    console.log('orderssssssssssssssssss',orders);
     var prodIDS = [];
     var obj = {};
     for (var i = 0; i < orders.length; i++) {
@@ -88,6 +89,9 @@ const index = (props) => {
       obj['unitsOrdered'] = orders[i].unitsOrdered;
       obj['status'] = orders[i].status;
       obj['totalPrice'] = orders[i].totalPrice;
+      obj['costPerUnit'] = orders[i].costPerUnit;
+      obj['salePricePerUnit'] = orders[i].salePricePerUnit;
+      
       prodIDS.push(obj);
       obj = {};
     }
@@ -99,6 +103,8 @@ const index = (props) => {
         prodIDS[i].itemName,
         prodIDS[i].status,
         prodIDS[i].totalPrice,
+        prodIDS[i].costPerUnit,
+        prodIDS[i].salePricePerUnit,
       );
     };
     dispatch(updateOrderList());

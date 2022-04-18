@@ -44,9 +44,9 @@ export default class Database {
 
                   tx.executeSql('CREATE TABLE IF NOT EXISTS Inventory (itemId TEXT PRIMARY KEY NOT NULL, itemName TEXT NOT NULL, itemDesc TEXT, costPerUnit INTEGER NOT NULL ,itemImage TEXT,itemStock INTEGER NOT NULL,salePricePerUnit INTEGER NOT NULL,createdOn TEXT NOT NULL )');
                   tx.executeSql('CREATE TABLE IF NOT EXISTS Customer (customerId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, customerName TEXT NOT NULL, customerPhone INTEGER NOT NULL,customerCreatedOn TEXT NOT NULL)');
-                  tx.executeSql('CREATE TABLE IF NOT EXISTS Orders ( orderId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, status TEXT NOT NULL,unitsOrdered INTEGER NOT NULL,  totalPrice INTEGER NOT NULL, orderCreatedOn TEXT NOT NULL, itemId TEXT , FOREIGN KEY (itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE  )');
+                  tx.executeSql('CREATE TABLE IF NOT EXISTS Orders ( orderId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, status TEXT NOT NULL,unitsOrdered INTEGER NOT NULL,  totalPrice INTEGER NOT NULL, orderCreatedOn TEXT NOT NULL, itemId TEXT , costPerUnit INTEGER, salePricePerUnit INTEGER, FOREIGN KEY (itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE  )');
                   tx.executeSql('CREATE TABLE IF NOT EXISTS User (userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, userCNIC TEXT NOT NULL )');
-                  tx.executeSql('CREATE TABLE IF NOT EXISTS SalesHistory (salesId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,status DEFAULT COMPLETED, OrderCompletedOn TEXT NOT NULL, orderId INTEGER, itemId TEXT, FOREIGN KEY (orderId) REFERENCES Orders(orderId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(itemId) REFERENCES Inventory(itemId) ON DELETE CASCADE ON UPDATE CASCADE)');
+                  tx.executeSql('CREATE TABLE IF NOT EXISTS SalesHistory (salesId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,status DEFAULT COMPLETED, OrderCompletedOn TEXT NOT NULL, orderId INTEGER, itemId TEXT, FOREIGN KEY (orderId) REFERENCES Orders(orderId), FOREIGN KEY(itemId) REFERENCES Inventory(itemId) )');
                   // // tx.executeSql('CREATE TABLE IF NOT EXISTS Transactiondet (transactionId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,transDate TEXT NOT NULL,salesId INTEGER,customerId INTEGER,FOREIGN KEY (salesId) REFERENCES SalesHistory(salesId) ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY(customerId) REFERENCES Customer(customerId) ON DELETE CASCADE ON UPDATE CASCADE)');
 
                 }).then(() => {
@@ -305,14 +305,14 @@ export default class Database {
     });
   }
 
-  addOrder(itemId, unitsOrdered, itemName,status,totalPrice) {
+  addOrder(itemId, unitsOrdered, itemName,status,totalPrice,costPerUnit,salePricePerUnit) {
     
     const orderCreatedOn = new Date().toLocaleString();
     
     return new Promise((resolve) => {
       this.initDB().then((db) => {
         db.transaction((tx) => {
-          tx.executeSql('INSERT INTO Orders VALUES (?, ?, ?, ?, ?, ?)', [,status, unitsOrdered, totalPrice, orderCreatedOn, itemId]).then(([tx, results]) => {
+          tx.executeSql('INSERT INTO Orders VALUES (?, ?, ?, ?, ?, ?,?,?)', [,status, unitsOrdered, totalPrice, orderCreatedOn, itemId,costPerUnit,salePricePerUnit]).then(([tx, results]) => {
             resolve(results);
           });
         }).then((result) => {
@@ -394,7 +394,7 @@ updateOrderStatus(id) {
       const orders = [];
       this.initDB().then((db) => {
         db.transaction((tx) => {
-          tx.executeSql('select Inventory.itemName,Inventory.salePricePerUnit,Inventory.costPerUnit,SalesHistory.OrderCompletedOn,Orders.unitsOrdered,Orders.totalPrice FROM SalesHistory INNER JOIN Inventory ON SalesHistory.itemId=Inventory.itemId INNER JOIN Orders ON SalesHistory.itemId=Orders.itemId', []).then(([tx, results]) => {
+          tx.executeSql('select Inventory.itemName,Orders.salePricePerUnit,Orders.costPerUnit,SalesHistory.OrderCompletedOn,Orders.unitsOrdered,Orders.totalPrice FROM SalesHistory INNER JOIN Inventory ON SalesHistory.itemId=Inventory.itemId INNER JOIN Orders ON SalesHistory.itemId=Orders.itemId', []).then(([tx, results]) => {
             var len = results.rows.length;
             for (let i = 0; i < len; i++) {
               let row = results.rows.item(i);

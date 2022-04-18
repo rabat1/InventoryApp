@@ -9,13 +9,14 @@ import { useNavigation } from '@react-navigation/core';
 const index = ({ data, onConfirm }) => {
     //    console.log(data);
     const { navigate } = useNavigation();
-
     const [orderData, setOrderData] = useState({
         unitsOrdered: 1,
         status: 'Pending',
         itemId: data.itemId,
         totalPrice: data.salePricePerUnit,
         itemName: data.itemName,
+        costPerUnit: data.costPerUnit,
+        salePricePerUnit:data.salePricePerUnit,
 
     });
 
