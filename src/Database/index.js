@@ -394,7 +394,7 @@ updateOrderStatus(id) {
       const orders = [];
       this.initDB().then((db) => {
         db.transaction((tx) => {
-          tx.executeSql('select Inventory.itemName,Orders.salePricePerUnit,Orders.costPerUnit,SalesHistory.OrderCompletedOn,Orders.unitsOrdered,Orders.totalPrice FROM SalesHistory INNER JOIN Inventory ON SalesHistory.itemId=Inventory.itemId INNER JOIN Orders ON SalesHistory.itemId=Orders.itemId', []).then(([tx, results]) => {
+          tx.executeSql('select Inventory.itemName,Orders.salePricePerUnit,Orders.costPerUnit,SalesHistory.OrderCompletedOn,Orders.unitsOrdered,Orders.totalPrice FROM SalesHistory INNER JOIN Inventory ON SalesHistory.itemId=Inventory.itemId INNER JOIN Orders ON SalesHistory.orderId=Orders.orderId', []).then(([tx, results]) => {
             var len = results.rows.length;
             for (let i = 0; i < len; i++) {
               let row = results.rows.item(i);
